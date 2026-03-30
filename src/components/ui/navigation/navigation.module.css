@@ -1,5 +1,4 @@
 .navigate {
-  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -22,4 +21,11 @@
 
 .itemActive {
   background-color: var(--nav-hover-bg);
+}
+
+@media (max-width: 600px) {
+  .navigate {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }

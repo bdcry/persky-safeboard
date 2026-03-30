@@ -34,6 +34,7 @@ body {
   max-width: 1280px;
   font-family: var(--font-main);
   background-color: var(--brand-dark);
+  padding: 10px;
 }
 
 img,
