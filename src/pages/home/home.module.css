@@ -1,0 +1,9 @@
+.homeSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--brand-orange);
+  flex: 1;
+  border-radius: 30px;
+}

@@ -1,0 +1,25 @@
+.navigate {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--brand-orange);
+  border-radius: 30px;
+}
+
+.item {
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.item:hover {
+  background-color: var(--nav-hover-bg);
+}
+
+.itemActive {
+  background-color: var(--nav-hover-bg);
+}
