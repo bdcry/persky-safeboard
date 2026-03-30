@@ -3,9 +3,10 @@
   --brand-orange: #ff7b00;
   --brand-orange-hover: #e96f00;
   --brand-dark: #1e1e1e;
-  --brand-dark-soft: #2a2a2a;
+  --brand-dark-soft: #8B8B8B;
   --nav-hover-bg: #ffd8b8;
-  --nav-active-color: #1e1e1e;
+  --hover-bg: #ffd8b8;
+  --color-white: #FFFFFF;
 
   font-family: var(--font-main);
   line-height: 1.5;
@@ -34,7 +35,6 @@ body {
   max-width: 1280px;
   font-family: var(--font-main);
   background-color: var(--brand-dark);
-  padding: 10px;
 }
 
 img,
