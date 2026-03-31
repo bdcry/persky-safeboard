@@ -106,10 +106,6 @@
 }
 
 @media (max-width: 768px) {
-  .wrapper {
-    flex-direction: column;
-  }
-
   .input {
     max-width: 100%;
   }

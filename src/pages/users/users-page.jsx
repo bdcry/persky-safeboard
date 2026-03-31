@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './users-page.module.css';
 import { API } from '../../shared/api/axios';
+import { STATUS_LABELS } from '../../shared/constants';
 
 export const UsersPage = () => {
   const [users, setUsers] = useState([]);
@@ -28,7 +29,12 @@ export const UsersPage = () => {
   return (
     <section className={styles.usersSection}>
       <div className={styles.wrapper}>
-        <input type="text" className={styles.input} placeholder="Искать по имени или роли..." />
+        <input
+          type="text"
+          className={styles.input}
+          placeholder="Искать по имени или роли..."
+          onChange={(e) => console.log(e.target.value)}
+        />
         <button
           type="button"
           className={styles.btn}
@@ -56,11 +62,16 @@ export const UsersPage = () => {
                 <td className={styles.workerTd}>{user.username}</td>
                 <td className={styles.workerTd}>{user.email}</td>
                 <td className={styles.workerTd}>
-                  {groups.find((group) => Number(group.id) === user.groupId)?.name || 'Нет данных'}
+                  {groups.find((group) => Number(group.id) === user.groupId)?.name || 'Без группы'}
                 </td>
-                <td className={styles.workerTd}>{user.status}</td>
+                <td className={styles.workerTd}>{STATUS_LABELS[user.status]}</td>
                 <td className={styles.workerTd}>
-                  <button className={styles.workerBtn} onClick={() => console.log('удалить', user.id)}>✖</button>
+                  <button
+                    className={styles.workerBtn}
+                    onClick={() => console.log('удалить', user.id)}
+                  >
+                    ✖
+                  </button>
                 </td>
               </tr>
             ))}
