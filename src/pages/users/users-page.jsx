@@ -10,6 +10,8 @@ export const UsersPage = () => {
   const [sortField, setSortField] = useState('fullName');
   const [sortOrder, setSortOrder] = useState('asc');
 
+  const [searchValue, setSearchValue] = useState('');
+
   useEffect(() => {
     const getUsersData = async () => {
       const response = await API.get('/users');
@@ -25,6 +27,14 @@ export const UsersPage = () => {
     getGroupsData();
   }, []);
 
+  const filteredUsers = users.filter((user) => {
+    const searchLower = searchValue.toLowerCase();
+
+    return user.fullName.toLowerCase().includes(searchLower) || user.username.toLowerCase().includes(searchLower);
+  });
+
+  console.log('filteredUsers', filteredUsers);
+
   const handleSort = (field) => {
     if (sortField === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -34,7 +44,7 @@ export const UsersPage = () => {
     }
   };
 
-  const sortedUsers = [...users].sort((a, b) => {
+  const sortedUsers = [...filteredUsers].sort((a, b) => {
     if (sortOrder === 'asc') {
       if (sortField === 'groupId') {
         if (a[sortField] > b[sortField]) return 1;
@@ -60,8 +70,9 @@ export const UsersPage = () => {
         <input
           type="text"
           className={styles.input}
-          placeholder="Искать по имени или роли..."
-          onChange={(e) => console.log(e.target.value)}
+          placeholder="Искать по имени или юзернейму..."
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
         />
         <button
           type="button"
