@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 20px;
   min-width: 0;
+  flex: 1;
 }
 
 .wrapper {
@@ -104,6 +105,12 @@
   font-size: 1.5rem;
   color: var(--brand-orange);
   cursor: pointer;
+}
+
+.noData {
+  color: var(--color-white);
+  font-size: 1rem;
+  text-align: center;
 }
 
 @media (max-width: 768px) {

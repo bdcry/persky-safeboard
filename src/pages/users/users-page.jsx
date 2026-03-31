@@ -30,10 +30,11 @@ export const UsersPage = () => {
   const filteredUsers = users.filter((user) => {
     const searchLower = searchValue.toLowerCase();
 
-    return user.fullName.toLowerCase().includes(searchLower) || user.username.toLowerCase().includes(searchLower);
+    return (
+      user.fullName.toLowerCase().includes(searchLower) ||
+      user.username.toLowerCase().includes(searchLower)
+    );
   });
-
-  console.log('filteredUsers', filteredUsers);
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -127,6 +128,9 @@ export const UsersPage = () => {
           </tbody>
         </table>
       </div>
+      {sortedUsers.length === 0 && (
+        <div className={styles.noData}>По вашему запросу ничего не найдено</div>
+      )}
     </section>
   );
 };
