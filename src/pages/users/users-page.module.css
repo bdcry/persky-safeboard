@@ -97,6 +97,7 @@
 
 .workerTh {
   border-bottom: 1px solid var(--brand-orange);
+  cursor: pointer;
 }
 
 .workerBtn {

@@ -7,6 +7,9 @@ export const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [groups, setGroups] = useState([]);
 
+  const [sortField, setSortField] = useState('fullName');
+  const [sortOrder, setSortOrder] = useState('asc');
+
   useEffect(() => {
     const getUsersData = async () => {
       const response = await API.get('/users');
@@ -22,9 +25,34 @@ export const UsersPage = () => {
     getGroupsData();
   }, []);
 
-  if (users.length === 0) {
-    return <div>Загрузка...</div>;
-  }
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortOrder('asc');
+    }
+  };
+
+  const sortedUsers = [...users].sort((a, b) => {
+    if (sortOrder === 'asc') {
+      if (sortField === 'groupId') {
+        if (a[sortField] > b[sortField]) return 1;
+        if (a[sortField] < b[sortField]) return -1;
+        return 0;
+      }
+
+      return a[sortField].localeCompare(b[sortField]);
+    } else {
+      if (sortField === 'groupId') {
+        if (a[sortField] < b[sortField]) return 1;
+        if (a[sortField] > b[sortField]) return -1;
+        return 0;
+      }
+
+      return b[sortField].localeCompare(a[sortField]);
+    }
+  });
 
   return (
     <section className={styles.usersSection}>
@@ -47,16 +75,26 @@ export const UsersPage = () => {
         <table className={styles.workersTable}>
           <thead>
             <tr className={styles.workersTr}>
-              <th className={styles.workerTh}>Full Name</th>
-              <th className={styles.workerTh}>Username</th>
-              <th className={styles.workerTh}>E-mail</th>
-              <th className={styles.workerTh}>Group</th>
-              <th className={styles.workerTh}>Status</th>
+              <th className={styles.workerTh} onClick={() => handleSort('fullName')}>
+                Full Name {sortField === 'fullName' && (sortOrder === 'asc' ? '↑' : '↓')}
+              </th>
+              <th className={styles.workerTh} onClick={() => handleSort('username')}>
+                Username {sortField === 'username' && (sortOrder === 'asc' ? '↑' : '↓')}
+              </th>
+              <th className={styles.workerTh} onClick={() => handleSort('email')}>
+                E-mail {sortField === 'email' && (sortOrder === 'asc' ? '↑' : '↓')}
+              </th>
+              <th className={styles.workerTh} onClick={() => handleSort('groupId')}>
+                Group {sortField === 'groupId' && (sortOrder === 'asc' ? '↑' : '↓')}
+              </th>
+              <th className={styles.workerTh} onClick={() => handleSort('status')}>
+                Status {sortField === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
+              </th>
               <th className={styles.workerTh}>{/* тут action delete */}</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {sortedUsers.map((user) => (
               <tr className={styles.workersTrData} key={user.id}>
                 <td className={styles.workerTd}>{user.fullName}</td>
                 <td className={styles.workerTd}>{user.username}</td>
