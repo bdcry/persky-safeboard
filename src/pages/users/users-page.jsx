@@ -2,13 +2,11 @@ import { useEffect, useState } from 'react';
 import styles from './users-page.module.css';
 import { API } from '../../shared/api/axios';
 import { STATUS_LABELS } from '../../shared/constants';
+import { useSortHook } from './custom-hooks/useSortHook';
 
 export const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [groups, setGroups] = useState([]);
-
-  const [sortField, setSortField] = useState('fullName');
-  const [sortOrder, setSortOrder] = useState('asc');
 
   const [searchValue, setSearchValue] = useState('');
 
@@ -36,34 +34,8 @@ export const UsersPage = () => {
     );
   });
 
-  const handleSort = (field) => {
-    if (sortField === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortOrder('asc');
-    }
-  };
-
-  const sortedUsers = [...filteredUsers].sort((a, b) => {
-    if (sortOrder === 'asc') {
-      if (sortField === 'groupId') {
-        if (a[sortField] > b[sortField]) return 1;
-        if (a[sortField] < b[sortField]) return -1;
-        return 0;
-      }
-
-      return a[sortField].localeCompare(b[sortField]);
-    } else {
-      if (sortField === 'groupId') {
-        if (a[sortField] < b[sortField]) return 1;
-        if (a[sortField] > b[sortField]) return -1;
-        return 0;
-      }
-
-      return b[sortField].localeCompare(a[sortField]);
-    }
-  });
+  const { sortedItems: sortedUsers, sortField, sortOrder, handleSort } =
+    useSortHook(filteredUsers);
 
   return (
     <section className={styles.usersSection}>
