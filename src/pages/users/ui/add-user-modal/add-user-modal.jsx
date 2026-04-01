@@ -1,55 +1,16 @@
 import { createPortal } from 'react-dom';
 import styles from './add-user-modal.module.css';
-import { useEffect, useState } from 'react';
+import { useAddUserModal } from '../../hooks/useAddUserModal';
 import { STATUS_LABELS } from '../../../../shared/constants';
 
-export const AddUserModal = ({ isOpen, onClose, groups, onAddUser }) => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    username: '',
-    email: '',
-    groupId: '',
-    status: 'active',
-  });
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [isOpen, onClose]);
-
-  const handleSumbit = async (e) => {
-    e.preventDefault();
-
-    const payload = {
-      fullName: formData.fullName.trim(),
-      username: formData.username.trim(),
-      email: formData.email.trim(),
-      groupId: Number(formData.groupId) || null,
-      status: formData.status,
-    };
-
-    onAddUser(payload);
-    onClose();
-  };
-
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
+export const AddUserModal = ({ isOpen, onClose, groups, onAddUser 
+  
+}) => {
+  const { formData, handleSumbit, handleOverlayClick, handleChange } = useAddUserModal(
+    onAddUser,
+    onClose,
+    isOpen,
+  );
 
   const showStatusOptions = () => {
     return Object.entries(STATUS_LABELS).map(([value, label]) => (
@@ -77,7 +38,7 @@ export const AddUserModal = ({ isOpen, onClose, groups, onAddUser }) => {
               name="fullName"
               placeholder="Введите ФИО..."
               value={formData.fullName}
-              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+              onChange={(e) => handleChange(e.target.value, 'fullName')}
               required
             />
 
@@ -88,7 +49,7 @@ export const AddUserModal = ({ isOpen, onClose, groups, onAddUser }) => {
               name="username"
               placeholder="Введите юзернейм..."
               value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              onChange={(e) => handleChange(e.target.value, 'username')}
               required
             />
 
@@ -99,7 +60,7 @@ export const AddUserModal = ({ isOpen, onClose, groups, onAddUser }) => {
               name="email"
               placeholder="Введите email..."
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) => handleChange(e.target.value, 'email')}
               required
             />
 
@@ -108,7 +69,7 @@ export const AddUserModal = ({ isOpen, onClose, groups, onAddUser }) => {
               id="group"
               name="group"
               value={formData.groupId}
-              onChange={(e) => setFormData({ ...formData, groupId: e.target.value })}
+              onChange={(e) => handleChange(e.target.value, 'groupId')}
             >
               <option value="">Без группы</option>
               {groups.map((group) => (
@@ -123,7 +84,7 @@ export const AddUserModal = ({ isOpen, onClose, groups, onAddUser }) => {
               id="status"
               name="status"
               value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+              onChange={(e) => handleChange(e.target.value, 'status')}
             >
               {showStatusOptions()}
             </select>
