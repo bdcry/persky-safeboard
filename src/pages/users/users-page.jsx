@@ -4,12 +4,15 @@ import { API } from '../../shared/api/axios';
 import { STATUS_LABELS } from '../../shared/constants';
 import { useSortHook } from './custom-hooks/useSortHook';
 import toast from 'react-hot-toast';
+import { AddUserModal } from './ui/add-user-modal/add-user-modal';
 
 export const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [groups, setGroups] = useState([]);
 
   const [searchValue, setSearchValue] = useState('');
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const getUsersData = async () => {
@@ -37,11 +40,22 @@ export const UsersPage = () => {
 
   const { sortedItems: sortedUsers, sortField, sortOrder, handleSort } = useSortHook(filteredUsers);
 
-  const handleDeleteUser = (userId) => {
+  const handleDeleteUser = async (userId) => {
     const username = users.find((user) => user.id === userId)?.username;
     const preparedUsers = users.filter((user) => user.id !== userId);
-    setUsers(preparedUsers);
-    toast.success(`Пользователь ${username} удалён`);
+
+    const response = await API.delete(`/users/${userId}`);
+
+    if (response.status === 200) {
+      setUsers(preparedUsers);
+      toast.success(`Пользователь ${username} удалён`);
+    } else {
+      toast.error(`Не удалось удалить пользователя ${username}`);
+    }
+  };
+
+  const handleAddUser = (newUser) => {
+    setUsers((prevUsers) => [...prevUsers, newUser]);
   };
 
   return (
@@ -54,14 +68,18 @@ export const UsersPage = () => {
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
-        <button
-          type="button"
-          className={styles.btn}
-          onClick={() => console.log('ставим показ модалки - true')}
-        >
+        <button type="button" className={styles.btn} onClick={() => setIsModalOpen(true)}>
           +
         </button>
       </div>
+      {isModalOpen && (
+        <AddUserModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          groups={groups}
+          onAddUser={handleAddUser}
+        />
+      )}
       <div className={styles.tableWrapper}>
         <table className={styles.workersTable}>
           <thead>
