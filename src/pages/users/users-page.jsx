@@ -3,6 +3,7 @@ import styles from './users-page.module.css';
 import { API } from '../../shared/api/axios';
 import { STATUS_LABELS } from '../../shared/constants';
 import { useSortHook } from './custom-hooks/useSortHook';
+import toast from 'react-hot-toast';
 
 export const UsersPage = () => {
   const [users, setUsers] = useState([]);
@@ -34,8 +35,14 @@ export const UsersPage = () => {
     );
   });
 
-  const { sortedItems: sortedUsers, sortField, sortOrder, handleSort } =
-    useSortHook(filteredUsers);
+  const { sortedItems: sortedUsers, sortField, sortOrder, handleSort } = useSortHook(filteredUsers);
+
+  const handleDeleteUser = (userId) => {
+    const username = users.find((user) => user.id === userId)?.username;
+    const preparedUsers = users.filter((user) => user.id !== userId);
+    setUsers(preparedUsers);
+    toast.success(`Пользователь ${username} удалён`);
+  };
 
   return (
     <section className={styles.usersSection}>
@@ -74,7 +81,7 @@ export const UsersPage = () => {
               <th className={styles.workerTh} onClick={() => handleSort('status')}>
                 Status {sortField === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
               </th>
-              <th className={styles.workerTh}>{/* тут action delete */}</th>
+              <th className={styles.workerTh}></th>
             </tr>
           </thead>
           <tbody>
@@ -88,10 +95,7 @@ export const UsersPage = () => {
                 </td>
                 <td className={styles.workerTd}>{STATUS_LABELS[user.status]}</td>
                 <td className={styles.workerTd}>
-                  <button
-                    className={styles.workerBtn}
-                    onClick={() => console.log('удалить', user.id)}
-                  >
+                  <button className={styles.workerBtn} onClick={() => handleDeleteUser(user.id)}>
                     ✖
                   </button>
                 </td>
