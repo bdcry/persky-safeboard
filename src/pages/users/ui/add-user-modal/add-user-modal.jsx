@@ -2,8 +2,6 @@ import { createPortal } from 'react-dom';
 import styles from './add-user-modal.module.css';
 import { useEffect, useState } from 'react';
 import { STATUS_LABELS } from '../../../../shared/constants';
-import { API } from '../../../../shared/api/axios';
-import toast from 'react-hot-toast';
 
 export const AddUserModal = ({ isOpen, onClose, groups, onAddUser }) => {
   const [formData, setFormData] = useState({
@@ -43,13 +41,8 @@ export const AddUserModal = ({ isOpen, onClose, groups, onAddUser }) => {
       status: formData.status,
     };
 
-    const response = await API.post('/users', payload);
-
-    if (response.status === 201) {
-      onClose();
-      onAddUser(response.data);
-      toast.success(`Пользователь ${formData.username} добавлен`);
-    }
+    onAddUser(payload);
+    onClose();
   };
 
   const handleOverlayClick = (e) => {

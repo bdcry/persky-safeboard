@@ -44,18 +44,25 @@ export const UsersPage = () => {
     const username = users.find((user) => user.id === userId)?.username;
     const preparedUsers = users.filter((user) => user.id !== userId);
 
-    const response = await API.delete(`/users/${userId}`);
-
-    if (response.status === 200) {
+    try {
+      await API.delete(`/users/${userId}`);
       setUsers(preparedUsers);
       toast.success(`Пользователь ${username} удалён`);
-    } else {
+    } catch (err) {
       toast.error(`Не удалось удалить пользователя ${username}`);
+      console.error(err);
     }
   };
 
-  const handleAddUser = (newUser) => {
-    setUsers((prevUsers) => [...prevUsers, newUser]);
+  const handleAddUser = async (payload) => {
+    try {
+      const response = await API.post('/users', payload);
+      setUsers((prevUsers) => [...prevUsers, response.data]);
+      toast.success(`Пользователь ${payload.username} добавлен`);
+    } catch (err) {
+      toast.error(`Не удалось добавить пользователя ${payload.username}`);
+      console.error(err);
+    }
   };
 
   return (
