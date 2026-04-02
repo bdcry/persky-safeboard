@@ -4,7 +4,7 @@ export const Home = () => {
   return (
     <section className={styles.homeSection}>
       <h1>
-        Добро пожаловать в <span className={styles.name}>PERSKY SAFEBORD_</span>
+        Добро пожаловать в <span className={styles.name}>PERSKY SAFEBOARD_</span>
       </h1>
     </section>
   );

@@ -1,16 +1,143 @@
-# React + Vite
+# PERSKY SAFEBOARD_
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Внутренняя директория специалистов платформы SafeBoard.  
+Проект выполнен как тестовое задание на React с mock API на `json-server`.
 
-Currently, two official plugins are available:
+## Ссылки
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Репозиторий: [GitHub](https://github.com/bdcry/persky-safeboard)
+- Деплой: [Vercel](https://persky-safeboard-pts5wh1a2-bdcrys-projects-62180a9f.vercel.app/)
 
-## React Compiler
+> Примечание: на Vercel опубликована frontend-часть приложения.  
+> Mock API на `json-server` используется для локального запуска проекта, поэтому полный сценарий работы с данными доступен локально.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Стек проекта
 
-## Expanding the ESLint configuration
+- React 19
+- React Router DOM 7
+- Vite
+- Axios
+- React Hot Toast
+- JSON Server
+- ESLint
+- Prettier
+- CSS Modules
+- Plain JavaScript
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Страницы приложения
+
+- `/` — приветственная страница
+- `/users` — список сотрудников платформы
+- `/groups` — обзор рабочих групп
+
+## Бизнес-логика проекта
+
+Приложение моделирует внутреннюю директорию специалистов платформы безопасности SafeBoard.
+
+В проекте есть две основные сущности:
+
+- `users` — сотрудники платформы
+- `groups` — рабочие группы
+
+На странице `Users` реализован основной рабочий сценарий:
+
+- просмотр списка сотрудников
+- поиск по имени и username
+- сортировка по колонкам
+- добавление нового пользователя
+- удаление пользователя
+
+На странице `Groups` пользователи сгруппированы по рабочим группам. Это обзорный экран, который показывает:
+
+- все существующие группы
+- краткое описание каждой группы
+- количество участников
+- состав группы
+- отдельный блок пользователей без назначения в группу
+
+Все данные загружаются из `db.json` через `json-server`. Поиск и сортировка выполняются на клиенте.
+
+## Запуск проекта
+
+Установить зависимости:
+
+```bash
+npm install
+```
+
+Запустить mock backend:
+
+```bash
+npm run server
+```
+
+Запустить приложение:
+
+```bash
+npm run dev
+```
+
+После запуска:
+
+- frontend: `http://localhost:5173`
+- mock API: `http://localhost:3001`
+
+## Структура проекта
+
+```text
+persky-safeboard/
+├── src/
+│   ├── app/
+│   │   ├── main.jsx
+│   │   ├── app.jsx
+│   │   ├── index.css
+│   │   └── router/
+│   ├── components/
+│   │   └── ui/
+│   │       └── navigation/
+│   ├── pages/
+│   │   ├── home/
+│   │   ├── users/
+│   │   │   ├── api/
+│   │   │   ├── hooks/
+│   │   │   └── ui/
+│   │   └── groups/
+│   └── shared/
+│       ├── api/
+│       ├── ui/
+│       └── constants.js
+├── db.json
+├── package.json
+└── README.md
+```
+
+## Выводы по проектированию UI
+
+### Ручное проектирование UI: страница Users
+
+Страница `Users` проектировалась вручную. Основной фокус был на рабочем интерфейсе со списком сотрудников: таблица, поиск, сортировка, добавление и удаление.
+
+Ручной подход оказался полезен именно для страницы с более плотной логикой, потому что позволил точечно контролировать структуру таблицы, поведение сортировки, состояние модалки и общий пользовательский сценарий.
+
+### Генерация UI с помощью LLM: страница Groups
+
+Страница `Groups` была реализована как обзорный экран и генерировалась с помощью LLM. Такой подход хорошо подошел для этой задачи, поскольку экран не требует сложной интерактивной логики и естественно собирается из карточек, секций и списков.
+
+LLM помогла быстрее собрать:
+
+- общую структуру страницы
+- карточки групп
+- компактное представление участников
+- адаптивную раскладку
+
+При этом итоговое решение всё равно пришлось подстраивать под уже существующий стиль проекта, чтобы `Groups` выглядела как часть того же приложения, а не как отдельный шаблон.
+
+### Общий вывод
+
+Ручной подход лучше подходит для экранов с более сложным поведением и большим количеством пользовательских действий.  
+LLM удобнее использовать как инструмент ускорения для обзорных экранов, если уже есть готовый визуальный контекст и понятные ограничения.
+
+В рамках этого тестового оба подхода логично разделились:
+
+- `Users` — вручную, как основной рабочий интерфейс
+- `Groups` — с помощью LLM, как обзорная страница
