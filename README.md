@@ -65,7 +65,7 @@
 npm install
 ```
 
-Запустить mock backend:
+Запустить бекенд:
 
 ```bash
 npm run server
